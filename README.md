@@ -8,7 +8,7 @@ The models are trained and evaluated on the MNIST handwritten digit classificati
 
 
 ## Task1 - MLP
-![MLP 학습 결과](/Results\MLP_result.png)
+![MLP 학습 결과](Results/MLP_result.png)
 
 **최종 Accuracy: 94.31%**
 
@@ -21,7 +21,7 @@ MNIST 데이터를 이용하여 3-layer MLP를 학습함
 이는 각 mini-batch에 포함되는 클래스별 샘플 수가 적고, 클래스별 샘플 구성이 매번 무작위로 달라지기 때문이라고 판단함.
 
 ## Task2 - CNN
-![CNN 학습 결과](Results\CNN_result.png)
+![CNN 학습 결과](Results/CNN_result.png)
 
 **최종 Accuracy: NN.nn%**
 

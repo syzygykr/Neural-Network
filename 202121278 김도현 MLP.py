@@ -143,6 +143,5 @@ for p in F:
 Y_pred = np.argmax(Y_pred, -1)
 print('ACC: {:.2f}'.format(np.mean(Y_pred == Y_test.reshape(-1)) * 100))
 
-# Keep both windows open until the user closes them.
 plt.ioff()
 plt.show(block=True)

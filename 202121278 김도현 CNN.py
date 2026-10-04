@@ -8,8 +8,8 @@ def load_data():
     test_data = MNIST(root='./data', train=False, download=True)
 
     # image: (N, 28, 28) -> (N, 784)
-    X_train = train_data.data.numpy().reshape(-1, 28*28).astype(np.float32)
-    X_test = test_data.data.numpy().reshape(-1, 28*28).astype(np.float32)
+    X_train = train_data.data.numpy().reshape(-1, 28, 28, 1).astype(np.float32)
+    X_test = test_data.data.numpy().reshape(-1, 28, 28, 1).astype(np.float32)
 
     # normalize [0, 255] -> [0, 1]
     X_train /= 255.0
@@ -118,7 +118,8 @@ class pooling():
     
                 # Reshape the gradient for the pooling layer
                 pooling_grad = np.stack(index, -1).reshape(b, self.stride, self.stride, -1)
-                grad_next[:, i:i+self.stride, j:j+self.stride, :] = pooling_grad
+                grad_next[:, i*self.stride:(i+1)*self.stride,
+                             j*self.stride:(j+1)*self.stride, :] = pooling_grad
         return grad_next
 
 F = [perceptron(1, 32, 5), pooling(), perceptron(32, 64, 5), pooling(), perceptron(64, 10, 4, True)]

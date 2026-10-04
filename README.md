@@ -8,7 +8,7 @@ The models are trained and evaluated on the MNIST handwritten digit classificati
 
 
 ## Task1 - MLP
-![MLP 학습 결과](Results\MLP_result.png)
+![MLP 학습 결과](/Results\MLP_result.png)
 
 **최종 Accuracy: 94.31%**
 

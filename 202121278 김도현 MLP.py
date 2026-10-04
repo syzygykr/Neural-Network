@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torchvision.datasets import MNIST
 
-
+# 데이터 로더
 def load_data():
     train_data = MNIST(root='./data', train=True, download=True)
     test_data = MNIST(root='./data', train=False, download=True)
@@ -26,8 +26,7 @@ def load_data():
 
     return X_train, Y_train, X_test, Y_test
 
-
-
+# 퍼셉트론 구현
 class perceptron():
     def __init__(self, c_in, c_out, is_final=False):
         # c_in is the number of input neuron
@@ -73,6 +72,7 @@ batch_size = 128
 
 N = len(X_train)
 
+# 그래프 출력을 위한 설정(창 생성, 축 레이블, 범례 설정 및 초기화)
 plt.ion()
 fig_loss, ax_loss = plt.subplots(num='Training Loss')
 loss_line, = ax_loss.plot([], [], label='Total loss')
@@ -90,6 +90,7 @@ ax_cost.set_ylabel('Cost')
 ax_cost.legend(loc='upper right')
 plt.show(block=False)
 
+# 학습
 for epoch in range(10):
     X, Y = [], []
     idx = np.arange(N)
@@ -124,7 +125,7 @@ for epoch in range(10):
                 grad = p.backward(grad, lr)
             X, Y = [], []
 
-            # Update both figures without clearing their axes or legends.
+            # 그래프 실시간 업데이트
             steps = np.arange(len(Loss))
             loss_line.set_data(steps, Loss)
             for class_id, line in enumerate(class_lines):
@@ -134,14 +135,15 @@ for epoch in range(10):
                 ax.autoscale_view()
                 ax.set_ylim(bottom=0)
                 fig.canvas.draw_idle()
-            plt.pause(0.01)
+            plt.pause(0.01)     
 
-
+# 테스트셋을 통한 모델 정확도 평가
 Y_pred = X_test.copy()
 for p in F:
     Y_pred = p.forward(Y_pred)
 Y_pred = np.argmax(Y_pred, -1)
 print('ACC: {:.2f}'.format(np.mean(Y_pred == Y_test.reshape(-1)) * 100))
 
+# 창을 종료하지 말고 대기
 plt.ioff()
 plt.show(block=True)

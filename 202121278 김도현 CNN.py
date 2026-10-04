@@ -33,7 +33,7 @@ class perceptron(): # one convolutional layer
         # c_out is the number of output neuron
         self.patch_sz = patch_sz
         self.c_out = c_out
-        self.w = np.random.rand(c_in * patch_sz * patch_sz, c_out) * np.sqrt(2. / c_in * patch_sz * patch_sz)
+        self.w = np.random.randn(c_in * patch_sz * patch_sz, c_out) * np.sqrt(2. / (c_in * patch_sz * patch_sz))
         self.b = np.zeros([1, c_out])
         self.is_final = is_final
 
@@ -79,7 +79,7 @@ class perceptron(): # one convolutional layer
 
         # Update parameters
         self.w = self.w - learning_rate * grad_w / (h * w)
-        self.b = self.b - learning_rate * grad_h.sum((0, 1, 2), keepdims=True).reshape(1, -1) / (h * w)
+        self.b = self.b - learning_rate * grad_h.sum(axis=(0, 1, 2)).reshape(1, -1) / (h * w)
         return grad_next / overlap
 
 # 풀링

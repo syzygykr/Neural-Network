@@ -7,7 +7,7 @@ def load_data():
     train_data = MNIST(root='./data', train=True, download=True)
     test_data = MNIST(root='./data', train=False, download=True)
 
-    # image: (N, 28, 28) -> (N, 784)
+    # image: (N, 28, 28) -> (N, 28, 28, 1)
     X_train = train_data.data.numpy().reshape(-1, 28, 28, 1).astype(np.float32)
     X_test = test_data.data.numpy().reshape(-1, 28, 28, 1).astype(np.float32)
 
@@ -33,7 +33,7 @@ class perceptron(): # one convolutional layer
         # c_out is the number of output neuron
         self.patch_sz = patch_sz
         self.c_out = c_out
-        self.w = np.random.rand(c_in * patch_sz * patch_sz, c_out) * np.sqrt(2. / c_in)
+        self.w = np.random.rand(c_in * patch_sz * patch_sz, c_out) * np.sqrt(2. / c_in * patch_sz * patch_sz)
         self.b = np.zeros([1, c_out])
         self.is_final = is_final
 
@@ -173,6 +173,7 @@ for epoch in range(10):
             Y_pred = X.copy()
             for p in F:
                 Y_pred = p.forward(Y_pred)
+            Y_pred = Y_pred.reshape(batch_size, 10)
             # Compute Loss (or cost)
             eps = 1e-12
             sample_cost = -np.sum(Label * np.log(Y_pred + eps), axis=1)
@@ -183,7 +184,7 @@ for epoch in range(10):
                 arr_cost[class_id].append(class_cost.mean() if class_cost.size else np.nan)
 
             # Update parameters
-            grad = (Y_pred - Label) / batch_size
+            grad = ((Y_pred - Label) / batch_size).reshape(batch_size, 1, 1, 10)
             for p in F[::-1]:
                 grad = p.backward(grad, lr)
             X, Y = [], []
@@ -201,11 +202,14 @@ for epoch in range(10):
             plt.pause(0.01)     
 
 # 테스트셋을 통한 모델 정확도 평가
-Y_pred = X_test.copy()
-for p in F:
-    Y_pred = p.forward(Y_pred)
-Y_pred = np.argmax(Y_pred, -1)
-print('ACC: {:.2f}'.format(np.mean(Y_pred == Y_test.reshape(-1)) * 100))
+preds = []
+for i in range(0, len(X_test), 100):
+    out = X_test[i:i+100]
+    for p in F:
+        out = p.forward(out)
+    preds.append(np.argmax(out.reshape(len(out), 10), axis=-1))
+preds = np.concatenate(preds)
+print('ACC: {:.2f}'.format(np.mean(preds == Y_test.reshape(-1)) * 100))
 
 # 창을 종료하지 말고 대기
 plt.ioff()

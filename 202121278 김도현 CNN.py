@@ -78,8 +78,8 @@ class perceptron(): # one convolutional layer
                 overlap[:, i:i+self.patch_sz, j:j+self.patch_sz, :] = 1
 
         # Update parameters
-        self.w = self.w - learning_rate * grad_w / (h * w)
-        self.b = self.b - learning_rate * grad_h.sum(axis=(0, 1, 2)).reshape(1, -1) / (h * w)
+        self.w = self.w - learning_rate * grad_w
+        self.b = self.b - learning_rate * grad_h.sum(axis=(0, 1, 2)).reshape(1, -1)
         return grad_next / overlap
 
 # 풀링

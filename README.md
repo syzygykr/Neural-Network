@@ -23,6 +23,6 @@ MNIST 데이터를 이용하여 3-layer MLP를 학습함
 ## Task2 - CNN
 ![CNN 학습 결과](Results/CNN_result.png)
 
-**최종 Accuracy: NN.nn%**
+**최종 Accuracy: 97.99%**
 
 
